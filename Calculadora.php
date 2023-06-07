@@ -1,3 +1,138 @@
+<?php
+    session_start();
+     if(isset($_POST["Numero"])){
+        if(isset($_SESSION["num"])){
+            $_SESSION["num"] .= $_POST["Numero"];
+        
+        }else{
+            $_SESSION["num"] = $_POST["Numero"];
+        }
+        $result = $_SESSION["num"];                
+    }else{
+        $result = "";
+    }
+    
+    if($_POST["Numero"] === "cc"){
+        $_SESSION["num"] = null;
+        $result = "";
+    }
+    
+    if(isset($_POST["Operacion"])){
+        $_SESSION["Op"] = $_POST["Operacion"];
+        $result = $_SESSION["Op"];
+    }
+
+
+
+
+
+
+
+        /*$cookie_name1="num";
+        $cookie_value1="";
+        $cookie_name2="op";
+        $cookie_value2="";
+    
+        if(isset($_POST["num"])){
+            $num=$_POST["num"];
+        }else{
+            $num="";
+        }
+        if(isset($_POST['op'])){
+            $cookie_value1=$_POST['num'];
+            setcookie($cookie_name1, $cookie_value1, time()+(86400*30),"/");
+    
+            $cookie_value2=$_POST["op"];
+            setcookie($cookie_name2, $cookie_value2, time()+(86400*30),"/");
+            $num="";
+        }
+        if(isset($_POST["equal"])){
+            $num=$_POST['num'];
+            switch($_COOKIE["op"])
+            {
+                case "+":
+                    $result=$_COOKIE["num"]+$num;
+                    break;
+                case "-":
+                    $result=$_COOKIE["num"]-$num;
+                    break;
+                case "*":
+                    $result=$_COOKIE["num"]*$num;
+                    break;
+                case "/":
+                    $result=$_COOKIE["num"]/$num;
+                    break;
+                case "^":
+                    $result=$_COOKIE["num"]**$num;
+                    break;
+                case "%":
+                    $result=$_COOKIE["num"]*($num/100);
+                    break;
+                case "√":
+                    $result=$_COOKIE["num"]**(1/$num);
+                    break;
+            }
+            $num=$result;
+        }*/
+        
+    //header("Content-type: application/json");
+        /*
+        session_start();
+        if(isset($_POST["Numero"])){
+            if($_POST["Numero"] == "cc"){
+                $_SESSION["num"] = null;
+            }else{
+                if(isset($_SESSION["num"])){
+                    $_SESSION["num"] .= $_POST["Numero"];
+                }else{
+                    $_SESSION["num"] = $_POST["Numero"];
+                }
+            }
+        }
+
+        if(isset($_POST["Operacion"])){
+            switch($_SESSION["Operacion"])
+            {
+                case "+":
+                    $result=$_SESSION["num"]+$_POST["Numero"];
+                    break;
+                case "-":
+                    $result=$_SESSION["num"]-$_POST["Numero"];
+                    break;
+                case "*":
+                    $result=$_SESSION["num"]*$_POST["Numero"];
+                    break;
+                case "/":
+                    $result=$_SESSION["num"]/$_POST["Numero"];
+                    break;
+            }
+            $_SESSION["num"] = $result;
+        }*/
+
+        
+       // echo $_POST["Numero"];
+    
+    /*print_r($_POST);
+    
+    //print_r ($_POST["valor1"]);
+    
+    switch ($_POST["Numero"]):
+        case "+":
+            echo $_POST["valor1"] + $_POST["valor2"];
+            break;
+        case "-":
+            echo $_POST["valor1"] - $_POST["valor2"];
+            break;
+        case "*":
+            echo $_POST["valor1"] * $_POST["valor2"];
+            break;
+        case "/":
+            echo $_POST["valor1"] / $_POST["valor2"];
+            break;
+        endswitch;*/
+    ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,9 +193,10 @@
 <body>
     <form action="Calculadora.php" method="POST">
         <div class="container">
-        <input type="text" class="textOut" name="valor"><br>
+        <input type="text" class="textOut" name="valor" value="<?php echo @$num; ?>"><br>
+        <!--value = "<?php //echo isset($_SESSION['num']) ? $_SESSION['num'] :0;?>"-->
         <div class="group">
-            <input type="submit" class ="numBtn" name="Numero" value="7">
+            <input type="submit" class ="numBtn" name="Numeroum" value="7">
             <input type="submit" class ="numBtn" name="Numero" value="8">
             <input type="submit" class ="numBtn" name="Numero" value="9"> 
             <input type="submit" class ="opBtn" name="Operacion" value="+">
@@ -78,33 +214,13 @@
             <input type="submit" class ="opBtn" name="Operacion" value="*">
         </div>
         <div class="group">
-            <input type="submit" class ="numBtn btnCC" name="Clear" value="cc">
+            <input type="submit" class ="numBtn btnCC" name="Numero" value="cc">
             <input type="submit" class ="numBtn" name="Numero" value="0">
             <input type="submit" class ="numBtn btnRe" name="Resultado" value="=">
             <input type="submit" class ="opBtn" name="Operacion" value="/">
         </div>
         </div>
-        <?php
-    //header("Content-type: application/json");
-    print_r($_POST);
-    
-    //print_r ($_POST["valor1"]);
-    
-    switch ($_POST["operacion"]):
-        case "+":
-            echo $_POST["valor1"] + $_POST["valor2"];
-            break;
-        case "-":
-            echo $_POST["valor1"] - $_POST["valor2"];
-            break;
-        case "*":
-            echo $_POST["valor1"] * $_POST["valor2"];
-            break;
-        case "/":
-            echo $_POST["valor1"] / $_POST["valor2"];
-            break;
-        endswitch;
-    ?>
+      
     </form>
 </body>
 </html>
