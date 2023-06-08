@@ -1,135 +1,61 @@
 <?php
     session_start();
      if(isset($_POST["Numero"])){
-        if(isset($_SESSION["num"])){
+        if(isset($_SESSION["num"]) && !isset($_SESSION["num2"])){
             $_SESSION["num"] .= $_POST["Numero"];
-        
+            $result = $_SESSION["num"];                
+            echo "entro aqui";
+        }else if(isset($_SESSION["num2"])){
+            if(empty($_SESSION["num2"])){
+                $_SESSION["num2"] = $_POST["Numero"];
+            }else{
+                $_SESSION["num2"] .= $_POST["Numero"];
+            }
+            $result = $_SESSION["num2"];
         }else{
             $_SESSION["num"] = $_POST["Numero"];
+            $result = $_SESSION["num"];                
         }
-        $result = $_SESSION["num"];                
     }else{
         $result = "";
     }
     
-    if($_POST["Numero"] === "cc"){
+    if(isset($_POST["Clear"])){
         $_SESSION["num"] = null;
+        $_SESSION["num2"] = null;
         $result = "";
     }
     
     if(isset($_POST["Operacion"])){
         $_SESSION["Op"] = $_POST["Operacion"];
         $result = $_SESSION["Op"];
+        $_SESSION["num2"] = 0;
     }
 
-
-
-
-
-
-
-        /*$cookie_name1="num";
-        $cookie_value1="";
-        $cookie_name2="op";
-        $cookie_value2="";
-    
-        if(isset($_POST["num"])){
-            $num=$_POST["num"];
-        }else{
-            $num="";
-        }
-        if(isset($_POST['op'])){
-            $cookie_value1=$_POST['num'];
-            setcookie($cookie_name1, $cookie_value1, time()+(86400*30),"/");
-    
-            $cookie_value2=$_POST["op"];
-            setcookie($cookie_name2, $cookie_value2, time()+(86400*30),"/");
-            $num="";
-        }
-        if(isset($_POST["equal"])){
-            $num=$_POST['num'];
-            switch($_COOKIE["op"])
-            {
-                case "+":
-                    $result=$_COOKIE["num"]+$num;
+    if(isset($_POST["Resultado"])){
+        $num=$_SESSION['num2'];
+        switch($_SESSION["Op"])
+        {
+            case "+":
+                $result=$_SESSION["num"]+$num;
+                break;
+            case "-":
+                $result=$_SESSION["num"]-$num;
+                break;
+            case "*":
+                $result=$_SESSION["num"]*$num;
+                break;
+            case "/":
+                if($num === "0"){
+                    $result = "Operacion Invalida";
                     break;
-                case "-":
-                    $result=$_COOKIE["num"]-$num;
-                    break;
-                case "*":
-                    $result=$_COOKIE["num"]*$num;
-                    break;
-                case "/":
-                    $result=$_COOKIE["num"]/$num;
-                    break;
-                case "^":
-                    $result=$_COOKIE["num"]**$num;
-                    break;
-                case "%":
-                    $result=$_COOKIE["num"]*($num/100);
-                    break;
-                case "√":
-                    $result=$_COOKIE["num"]**(1/$num);
-                    break;
-            }
-            $num=$result;
-        }*/
-        
-    //header("Content-type: application/json");
-        /*
-        session_start();
-        if(isset($_POST["Numero"])){
-            if($_POST["Numero"] == "cc"){
-                $_SESSION["num"] = null;
-            }else{
-                if(isset($_SESSION["num"])){
-                    $_SESSION["num"] .= $_POST["Numero"];
                 }else{
-                    $_SESSION["num"] = $_POST["Numero"];
+                    $result=$_SESSION["num"]/$num;
+                    break;
                 }
-            }
         }
-
-        if(isset($_POST["Operacion"])){
-            switch($_SESSION["Operacion"])
-            {
-                case "+":
-                    $result=$_SESSION["num"]+$_POST["Numero"];
-                    break;
-                case "-":
-                    $result=$_SESSION["num"]-$_POST["Numero"];
-                    break;
-                case "*":
-                    $result=$_SESSION["num"]*$_POST["Numero"];
-                    break;
-                case "/":
-                    $result=$_SESSION["num"]/$_POST["Numero"];
-                    break;
-            }
-            $_SESSION["num"] = $result;
-        }*/
-
-        
-       // echo $_POST["Numero"];
-    
-    /*print_r($_POST);
-    
-    //print_r ($_POST["valor1"]);
-    
-    switch ($_POST["Numero"]):
-        case "+":
-            echo $_POST["valor1"] + $_POST["valor2"];
-            break;
-        case "-":
-            echo $_POST["valor1"] - $_POST["valor2"];
-            break;
-        case "*":
-            echo $_POST["valor1"] * $_POST["valor2"];
-            break;
-        case "/":
-            echo $_POST["valor1"] / $_POST["valor2"];
-            break;
-        endswitch;*/
+        $_SESSION["num"] = $result;
+    }
     ?>
 
 
@@ -147,8 +73,9 @@
         }
         .container{
             margin:auto;
+            margin-top: 50px;
             padding-block:20px;
-            background-color:black;
+            background-color:#154360;
             border:2px solid white;
             width: 400px;
             height: 500px;
@@ -160,7 +87,7 @@
             align-items:center;
         }
         .textOut{
-            background-color:black;
+            background-color: #154360 ;
             border-radius: 20px;
             padding:20px;
             font-size:1.3em;
@@ -193,10 +120,10 @@
 <body>
     <form action="Calculadora.php" method="POST">
         <div class="container">
-        <input type="text" class="textOut" name="valor" value="<?php echo @$num; ?>"><br>
+        <input type="text" class="textOut" name="valor" value="<?php echo @$result; ?>"><br>
         <!--value = "<?php //echo isset($_SESSION['num']) ? $_SESSION['num'] :0;?>"-->
         <div class="group">
-            <input type="submit" class ="numBtn" name="Numeroum" value="7">
+            <input type="submit" class ="numBtn" name="Numero" value="7">
             <input type="submit" class ="numBtn" name="Numero" value="8">
             <input type="submit" class ="numBtn" name="Numero" value="9"> 
             <input type="submit" class ="opBtn" name="Operacion" value="+">
@@ -214,7 +141,7 @@
             <input type="submit" class ="opBtn" name="Operacion" value="*">
         </div>
         <div class="group">
-            <input type="submit" class ="numBtn btnCC" name="Numero" value="cc">
+            <input type="submit" class ="numBtn btnCC" name="Clear" value="cc">
             <input type="submit" class ="numBtn" name="Numero" value="0">
             <input type="submit" class ="numBtn btnRe" name="Resultado" value="=">
             <input type="submit" class ="opBtn" name="Operacion" value="/">
